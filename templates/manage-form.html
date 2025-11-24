@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+{%block title%}Personal Details{%endblock%}
+{%block body%}
+    <form method="post">
+        <label for="booking_id" >Booking ID:</label>
+        <input type="number" name="booking_id"/>
+        <br />
+        <label for="booking_ref" >Booking Ref:</label>
+        <input type="number" name="booking_ref"/>
+        <button type="submit">Next</button>
+    </form>
+{%endblock%}

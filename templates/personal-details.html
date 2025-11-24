@@ -28,12 +28,14 @@
                 <label for="female{{p}}">Female</label>
                 <input id="male{{p}}" name="gender{{p}}" value="male" type="radio" required/>
                 <label for="male{{p}}">Male</label>
-
-                <label for="email{{p}}" >Email</label>
-                <input type="email" name="email{{p}}"/>
                 <br /><br/>
             </div>
             {%endfor%}
+            <label for="email">Email:</label>
+            <input type="email" name="email"/>
+            <br/>
+            <label for="phone">Phone:</label>
+            <input type="tel" name="phone"/>
         <button type="submit">Next</button>
     </form>
 {%endblock%}

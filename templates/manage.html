@@ -1,0 +1,15 @@
+{%extends 'base.html'%}
+{%block title%}Personal Details{%endblock%}
+{%block body%}
+    <p>Booking ID: {{booking.id}}<br/>
+    Booking Ref: {{booking.ref}}</p>
+
+    <label for="booking_id" >Booking ID:</label>
+    <input type="number" name="booking_id"/>
+    <!-- take user to confirmed function along with url query parameters -->
+    <a href="{{url_for('confirmed',booking_id=booking.id,booking_ref=booking.ref)}}">View booking details</a>
+    <h4>Passenger(s) details</h4>
+    <a>Update details</a>
+    <a>Update meal preference</a>
+    <a href="cancel/{{booking.id}}{{booking.ref}}">Cancel Booking</a>
+{%endblock%}

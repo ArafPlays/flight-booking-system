@@ -39,7 +39,6 @@ class Passenger(db.Model):
     lname = db.Column("lname",db.String(10),nullable=False)
     nationality=db.Column("nationality",db.String(10),nullable=False)
     gender=db.Column("gender",db.String(10),nullable=False)
-    email = db.Column("email",db.String(20),nullable=False)
 
     booking = db.relationship('Booking',secondary=booking_passenger,backref='passengers')
     # due to backref, both passenger.bookings and booking.passengers have been created.
@@ -65,6 +64,8 @@ class Booking(db.Model):
     # store booking preferences
     meal=db.Column('meal',db.String(10),nullable=False)
     seat=db.Column('seat',db.String(3),nullable=False)
+    email=db.Column('email',db.String(15),nullable=False)
+    phone=db.Column('phone',db.String(15),nullable=False)
     # booking reference (used for verification before viewing and managing and viewing bookings)
     ref = db.Column('ref',db.Integer,nullable=False)
 @app.route("/",methods=['GET','POST'])
@@ -133,8 +134,9 @@ def personal_details():
             session['lname'+p] = request.form['lname'+p] 
             session['nationality'+p] = request.form['nationality'+p] 
             session['gender'+p] = request.form['gender'+p] 
-            session['email'+p] = request.form['email'+p]
 
+        session['email'] = request.form['email']
+        session['phone'] = request.form['phone']
         # redirect to next page of wizard
         return redirect(url_for("seat",chosenSeat='NA'))
 
@@ -182,6 +184,8 @@ def payment():
         depart_flight_num=session['num']
         preference = session['preference']
         chosenSeat = session['chosenSeat']
+        email=session['email']
+        phone=session['phone']
 
         # if return date was kept empty, return flight number will be 0
         if session['returnDate'] =="":
@@ -191,7 +195,7 @@ def payment():
             return_flight_num=session['return_num']
 
         booking_ref = random.randint(100,10000)
-        new_booking = Booking(depart_flight_num=depart_flight_num,return_flight_num=return_flight_num,meal=preference,seat=chosenSeat,ref=booking_ref)
+        new_booking = Booking(depart_flight_num=depart_flight_num,return_flight_num=return_flight_num,meal=preference,seat=chosenSeat,email=email,phone=phone,ref=booking_ref)
         db.session.add(new_booking)
         db.session.commit()
         passenger_num=session['passenger_num']
@@ -204,9 +208,8 @@ def payment():
             lname = session['lname'+p] 
             nationality=session['nationality'+p]
             gender=session['gender'+p]
-            email=session['email'+p]
             # Note: When primary_key=True and the type is Integer, SQLAlchemy + the database automatically treat it as auto-increment. We don't need to pass in any passenger id
-            new_passenger = Passenger(title=title,fname=fname,lname=lname,nationality=nationality,gender=gender,email=email)
+            new_passenger = Passenger(title=title,fname=fname,lname=lname,nationality=nationality,gender=gender)
             # video tutorial for many to many relationship: https://www.youtube.com/watch?v=47i-jzrrIGQ
             # we append the booking into passenger, this automatically updates the association table.
             new_passenger.booking.append(new_booking)
@@ -231,15 +234,26 @@ def confirmed(booking_id,booking_ref):
     else:
         return "Booking reference number isn't correct."
 
-@app.route("/manage", methods=['GET','POST'])
-def manage():
-    output = "Manage booking"
-    output += "<input name='booking_id' type=number/>"
-    # user needs to enter last name of any passenger in the booking, we will use for loop to check
-    output += "<input name='lname' type=lname/>"
-    return output
-    # 
-# flights can be added to flights database on this page
+# this page will ask for booking id and reference number to allow access to booking.
+@app.route("/manage-form", methods=['GET','POST'])
+def manage_form():
+    if request.method=='GET':
+        return render_template('manage-form.html')
+    if request.method=='POST':
+        booking_id=request.form['booking_id']
+        booking_ref=request.form['booking_ref']
+        return redirect(url_for('manage',booking_id=booking_id,booking_ref=booking_ref))
+    
+@app.route("/manage/<int:booking_id>/<int:booking_ref>")
+def manage(booking_id,booking_ref):
+    # get the booking
+    booking = Booking.query.filter_by(id=booking_id).first()
+    # booking.ref is the actual ref, booking_ref is user provided. We check if they match.
+    if booking.ref == booking_ref:
+        return render_template('manage.html',booking=booking)
+    return f"Booking id or reference isn't correct"
+
+# flights can be added/edited/deleted to flights database on this page
 @app.route("/admin",methods=['GET','POST'])
 def admin():
     if request.method=='GET':
