@@ -56,8 +56,14 @@
         {%for p in passengers%}
             <p>
                 {{p.title}} {{p.fname}} {{p.lname}}<br/>
-                {{p.email}}<br/>
+                Nationality: {{p.nationality}}</br>
+                Gender: {{p.gender}}</br>
             </p>
         {%endfor%}
+        <p>
+            Contact details:<br/>
+            {{booking.email}}<br/>
+            {{booking.phone}}
+        </p>
     </div>
 {%endblock%}

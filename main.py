@@ -250,8 +250,30 @@ def manage(booking_id,booking_ref):
     booking = Booking.query.filter_by(id=booking_id).first()
     # booking.ref is the actual ref, booking_ref is user provided. We check if they match.
     if booking.ref == booking_ref:
-        return render_template('manage.html',booking=booking)
+        passengers = booking.passengers
+        return render_template('manage.html',booking=booking,passengers=passengers)
     return f"Booking id or reference isn't correct"
+
+@app.route("/cancel/<int:booking_id>/<int:booking_ref>")
+def cancel(booking_id,booking_ref):
+    try:
+        # get the booking
+        booking = Booking.query.filter_by(id=booking_id).first()
+        # booking.ref is the actual ref, booking_ref is user provided. We check if they match.
+        if booking.ref == booking_ref:
+            passengers = booking.passengers
+            # delete booking and associated passenger rows.
+            db.session.delete(booking)
+            # delete from list of passengers
+            for p in passengers:
+                db.session.delete(p)
+            db.session.commit()
+            return "Deleted booking and passenger records!"
+        else:
+            return f"Booking id or reference isn't correct"
+    except Exception as e:
+        return f"Sorry, error occured: {e}"
+
 
 # flights can be added/edited/deleted to flights database on this page
 @app.route("/admin",methods=['GET','POST'])

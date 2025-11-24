@@ -4,12 +4,31 @@
     <p>Booking ID: {{booking.id}}<br/>
     Booking Ref: {{booking.ref}}</p>
 
-    <label for="booking_id" >Booking ID:</label>
-    <input type="number" name="booking_id"/>
+    
     <!-- take user to confirmed function along with url query parameters -->
     <a href="{{url_for('confirmed',booking_id=booking.id,booking_ref=booking.ref)}}">View booking details</a>
-    <h4>Passenger(s) details</h4>
-    <a>Update details</a>
+    
+    <!-- update contact (email,phone) details -->
+    <div>
+        <h4>Update contact details</h4>
+        <label for="email" >Email: </label>
+        <input type="email" name="email" value="{{booking.email}}"/><br/>
+        <label for="phone" >Phone: </label>
+        <input type="tel" name="phone" value="{{booking.phone}}"/><br/>
+        <a>Update</a>
+    </div>
+    
+    <div>
+        <h4>Update passenger details</h4>
+        {% for p in passengers %}
+            <label for="fname" >First name: </label>
+            <input type="text" name="fname" value="{{p.fname}}"/><br/>
+            <label for="lname" >Last name: </label>
+            <input type="text" name="lname" value="{{p.lname}}"/><br/>
+            <a>Update</a><br/>
+        {%endfor%}
+    </div>
+
     <a>Update meal preference</a>
-    <a href="cancel/{{booking.id}}{{booking.ref}}">Cancel Booking</a>
+    <a href="{{url_for('cancel',booking_id=booking.id,booking_ref=booking.ref)}}">Cancel Booking</a>
 {%endblock%}
