@@ -244,15 +244,33 @@ def manage_form():
         booking_ref=request.form['booking_ref']
         return redirect(url_for('manage',booking_id=booking_id,booking_ref=booking_ref))
     
-@app.route("/manage/<int:booking_id>/<int:booking_ref>")
+@app.route("/manage/<int:booking_id>/<int:booking_ref>",methods=['GET','POST'])
 def manage(booking_id,booking_ref):
-    # get the booking
-    booking = Booking.query.filter_by(id=booking_id).first()
-    # booking.ref is the actual ref, booking_ref is user provided. We check if they match.
-    if booking.ref == booking_ref:
+    if request.method=='GET':
+        # get the booking
+        booking = Booking.query.filter_by(id=booking_id).first()
+        # booking.ref is the actual ref, booking_ref is user provided. We check if they match.
+        if booking.ref == booking_ref:
+            passengers = booking.passengers
+            return render_template('manage.html',booking=booking,passengers=passengers)
+        return f"Booking id or reference isn't correct"
+    elif request.method=='POST':
+        booking = Booking.query.filter_by(id=booking_id).first()
+        # get new info from input tags and update table
+        # update passenger rows, need a loop here since we have multiple passengers.
         passengers = booking.passengers
-        return render_template('manage.html',booking=booking,passengers=passengers)
-    return f"Booking id or reference isn't correct"
+        for p in passengers:
+            p.fname=request.form['fname'+str(p.id)]
+            p.lname=request.form['lname'+str(p.id)]
+
+        # update booking table (meal,email,phone)
+        booking.meal=request.form['meal']
+        booking.email=request.form['email']
+        booking.phone=request.form['phone']
+        db.session.commit()
+        # update booking and passenger table details to new info
+        flash('Changes saved!')
+        return redirect(url_for('manage',booking_id=booking_id,booking_ref=booking_ref))
 
 @app.route("/cancel/<int:booking_id>/<int:booking_ref>")
 def cancel(booking_id,booking_ref):

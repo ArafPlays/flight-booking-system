@@ -1,5 +1,5 @@
 {%extends 'base.html'%}
-{%block title%}Personal Details{%endblock%}
+{%block title%}Manage Booking{%endblock%}
 {%block body%}
     <p>Booking ID: {{booking.id}}<br/>
     Booking Ref: {{booking.ref}}</p>
@@ -8,27 +8,40 @@
     <!-- take user to confirmed function along with url query parameters -->
     <a href="{{url_for('confirmed',booking_id=booking.id,booking_ref=booking.ref)}}">View booking details</a>
     
-    <!-- update contact (email,phone) details -->
-    <div>
-        <h4>Update contact details</h4>
-        <label for="email" >Email: </label>
-        <input type="email" name="email" value="{{booking.email}}"/><br/>
-        <label for="phone" >Phone: </label>
-        <input type="tel" name="phone" value="{{booking.phone}}"/><br/>
-        <a>Update</a>
-    </div>
-    
-    <div>
-        <h4>Update passenger details</h4>
-        {% for p in passengers %}
-            <label for="fname" >First name: </label>
-            <input type="text" name="fname" value="{{p.fname}}"/><br/>
-            <label for="lname" >Last name: </label>
-            <input type="text" name="lname" value="{{p.lname}}"/><br/>
-            <a>Update</a><br/>
-        {%endfor%}
-    </div>
+    <form method="post">
+        <!-- update contact (email,phone) details -->
+        <div>
+            <h4>Update contact details</h4>
+            <label for="email" >Email: </label>
+            <input type="email" name="email" value="{{booking.email}}"/><br/>
+            <label for="phone" >Phone: </label>
+            <input type="tel" name="phone" value="{{booking.phone}}"/><br/>
+        </div>
+        
+        <div>
+            <h4>Update passenger details</h4>
+            {% for p in passengers %}
+                <label for="fname{{p}}" >First name: </label>
+                <input type="text" name="fname{{p.id}}" value="{{p.fname}}"/><br/>
+                <label for="lname{{p}}" >Last name: </label>
+                <input type="text" name="lname{{p.id}}" value="{{p.lname}}"/><br/><br/>
+            {%endfor%}
+        </div>
 
-    <a>Update meal preference</a>
+        <div>
+            <h4>Update meal</h4>
+            <label for="meal" >Meal: </label>
+            <select name="meal">
+                <!-- the if statement pre selects current meal -->
+                <option value="No preference" {%if booking.meal=='No preference'%}selected{%endif%}>No preference</option>
+                <option value="Halal" {%if booking.meal=='Halal'%}selected{%endif%}>Halal</option>
+                <option value="Kosher" {%if booking.meal=='Kosher'%}selected{%endif%}>Kosher</option>
+                <option value="Veg" {%if booking.meal=='Veg'%}selected{%endif%}>Veg</option>
+            </select>
+            <br/>
+        </div>
+
+        <button type="submit">Confirm changes</button>
+    </form>
     <a href="{{url_for('cancel',booking_id=booking.id,booking_ref=booking.ref)}}">Cancel Booking</a>
 {%endblock%}
