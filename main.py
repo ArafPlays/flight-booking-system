@@ -2,6 +2,7 @@ from flask import Flask,render_template,request,session,redirect,url_for,flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 import datetime
+# to store list of passengers in booking table
 
 app=Flask(__name__)
 app.secret_key = "^@^$Lrj$@$JJ223828AJEJA2828$"
@@ -25,6 +26,12 @@ class Flight(db.Model):
     fclass = db.Column("fclass",db.String(10), nullable=False)
     price= db.Column("price",db.Integer, nullable=False)
 
+# note: many to many relationships require an association table. Each pssenger can have multiple bookings and each booking can have multiple passengers.
+booking_passenger=db.Table('booking_passenger',
+    db.Column('booking_id',db.Integer,db.ForeignKey('booking.id')),
+    db.Column('passenger_id',db.Integer,db.ForeignKey('passenger.id'))
+)
+
 class Passenger(db.Model):
     id=db.Column('id',db.Integer,primary_key=True)
     title = db.Column("title",db.String(5),nullable=False)
@@ -33,16 +40,18 @@ class Passenger(db.Model):
     nationality=db.Column("nationality",db.String(10),nullable=False)
     gender=db.Column("gender",db.String(10),nullable=False)
     email = db.Column("email",db.String(20),nullable=False)
-    # relationship
-    bookings = db.relationship("Booking",backref='passenger',lazy=True)
-    # backref automatically creates booking.passenger
+
+    booking = db.relationship('Booking',secondary=booking_passenger,backref='passengers')
+    # due to backref, both passenger.bookings and booking.passengers have been created.
 
 class Booking(db.Model):
     # booking id
     id=db.Column('id',db.Integer,primary_key=True)
 
     # store passenger and flight
-    passenger_id=db.Column(db.Integer,db.ForeignKey('passenger.id'), nullable=False)
+    # not needed anymore because we have backref on passenger table
+    # passenger_id=db.Column(db.Integer,db.ForeignKey('passenger.id'), nullable=False)
+
     depart_flight_num=db.Column(db.Integer,db.ForeignKey('flight.num'),nullable=False)
     # using 2 foreign key to same key will cause an error here, 
     # we need to specify
@@ -70,7 +79,7 @@ def index():
         session['departDate'] = request.form['departDate']
         session['returnDate'] = request.form['returnDate']
         session['fclass'] = request.form['fclass']
-        session['passenger_num'] = request.form['passenger_num']
+        session['passenger_num'] = int(request.form['passenger_num'])
         # send user to departure page with url query parameters
         return redirect(url_for('departure'))
     
@@ -110,16 +119,21 @@ def save_flight(num):
 
 @app.route("/personal-details",methods=['GET','POST'])
 def personal_details():
+    passenger_num=session['passenger_num']
     if request.method=='GET':
-        return render_template('personal-details.html')
+        return render_template('personal-details.html',passenger_num=passenger_num)
     elif request.method=='POST':
         # if user submits, save info to session
-        session['title'] = request.form['title']
-        session['fname'] = request.form['fname'] 
-        session['lname'] = request.form['lname'] 
-        session['nationality'] = request.form['nationality'] 
-        session['gender'] = request.form['gender'] 
-        session['email'] = request.form['email'] 
+        # loop to go through multiple passengers
+        for p in range(passenger_num):
+            p = str(p)
+            session['title'+p] = request.form['title'+p]
+            session['fname'+p] = request.form['fname'+p] 
+            session['lname'+p] = request.form['lname'+p] 
+            session['nationality'+p] = request.form['nationality'+p] 
+            session['gender'+p] = request.form['gender'+p] 
+            session['email'+p] = request.form['email'+p]
+
         # redirect to next page of wizard
         return redirect(url_for("seat",chosenSeat='NA'))
 
@@ -162,19 +176,6 @@ def payment():
         return render_template('payment.html',flight=flight,session=session)
     elif request.method=='POST':
         # save to database
-        # add new passenger to database
-        title= session['title']
-        fname = session['fname']
-        lname = session['lname'] 
-        nationality=session['nationality']
-        gender=session['gender']
-        email=session['email'] 
-
-        # Note: When primary_key=True and the type is Integer, SQLAlchemy + the database automatically treat it as auto-increment. We don't need to pass in any passenger id
-        new_passenger = Passenger(title=title,fname=fname,lname=lname,nationality=nationality,gender=gender,email=email)
-        db.session.add(new_passenger)
-
-        db.session.commit()
         
         # add new booking to database
         depart_flight_num=session['num']
@@ -188,29 +189,44 @@ def payment():
             # if return date wasn't empty, customer will have already selected and saved a return flight number into session, we simply access and store it into a variable
             return_flight_num=session['return_num']
 
-        new_booking = Booking(passenger_id=new_passenger.id,depart_flight_num=depart_flight_num,return_flight_num=return_flight_num,meal=preference,seat=chosenSeat)
+        # add a list of passenger id to booking
+        new_booking = Booking(depart_flight_num=depart_flight_num,return_flight_num=return_flight_num,meal=preference,seat=chosenSeat)
         db.session.add(new_booking)
         db.session.commit()
-        flash("Saved to database")
-        session.clear()
-        return redirect(url_for('confirmed',booking_id=new_booking.id,lname=new_passenger.lname))
+        passenger_num=session['passenger_num']
+        # list to store all passenger ids so we can add them to booking table
+        # for loop to add all passengers to database
+        for p in range(passenger_num):
+            p=str(p)
+            title= session['title'+p]
+            fname = session['fname'+p]
+            lname = session['lname'+p] 
+            nationality=session['nationality'+p]
+            gender=session['gender'+p]
+            email=session['email'+p]
+            # Note: When primary_key=True and the type is Integer, SQLAlchemy + the database automatically treat it as auto-increment. We don't need to pass in any passenger id
+            new_passenger = Passenger(title=title,fname=fname,lname=lname,nationality=nationality,gender=gender,email=email)
+            # video tutorial for many to many relationship: https://www.youtube.com/watch?v=47i-jzrrIGQ
+            # we append the booking into passenger, this automatically updates the association table.
+            new_passenger.booking.append(new_booking)
+            db.session.add(new_passenger)
+            db.session.commit()
 
-@app.route("/confirmed/<int:booking_id>/<lname>")
-def confirmed(booking_id,lname):
+        # clear session after everything has been saved to database
+        session.clear()
+        return redirect(url_for('confirmed',booking_id=new_booking.id))
+
+@app.route("/confirmed/<int:booking_id>")
+def confirmed(booking_id):
     # get the booking, flight and passenger associated with this booking id.
     booking=Booking.query.filter_by(id=booking_id).first()
-
-    passenger_id = booking.passenger_id
-    passenger = Passenger.query.filter_by(id=passenger_id).first()
-    # url verification, lname needs to match booking lname in order to retrieve info
-    if passenger.lname==lname:
-        depart_flight_num=booking.depart_flight_num
-        depart_flight = Flight.query.filter_by(num=depart_flight_num).first()
-        return_flight_num=booking.return_flight_num
-        return_flight = Flight.query.filter_by(num=return_flight_num).first()
-        return render_template('confirmed.html',booking=booking,depart_flight=depart_flight,return_flight=return_flight,passenger=passenger)
-    else:
-        return f"Booking id and last name doesn't match."
+    
+    depart_flight_num=booking.depart_flight_num
+    depart_flight = Flight.query.filter_by(num=depart_flight_num).first()
+    return_flight_num=booking.return_flight_num
+    return_flight = Flight.query.filter_by(num=return_flight_num).first()
+    passenger_list = booking.passengers
+    return render_template('confirmed.html',booking=booking,depart_flight=depart_flight,return_flight=return_flight,passengers=passenger_list)
 
 # flights can be added to flights database on this page
 @app.route("/admin",methods=['GET','POST'])

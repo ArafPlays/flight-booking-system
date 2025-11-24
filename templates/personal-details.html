@@ -3,31 +3,37 @@
 {%block body%}
     <form method="post">
         <h2>Personal Details</h2>
+        <!-- display this form multiple times based on passenger num-->
+        <!-- add p (num) in input for so we can differentiate passengers -->
+        {%for p in range(passenger_num)%}
+            <div>
+                <label for="title">Title</label>
+                <!-- note: in Jinja, single bracket is used for logic. double bracket is used to inject variables-->
+                <select name="title{{p}}" required>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Dr.">Dr.</option>
+                </select>
 
-        <label for="title">Title</label>
-        <select name="title" required>
-            <option value="Mrs.">Mrs.</option>
-            <option value="Mr.">Mr.</option>
-            <option value="Dr.">Dr.</option>
-        </select>
+                <label for="fname{{p}}">First name</label>
+                <input type="text" name="fname{{p}}" required>
 
-        <label for="fname">First name</label>
-        <input type="text" name="fname" required>
+                <label for="lname{{p}}">Last name</label>
+                <input type="text" name="lname{{p}}" required>
 
-        <label for="fname">Last name</label>
-        <input type="text" name="lname" required>
+                <label for="nationality{{p}}">Nationality</label>
+                <input type="text" name="nationality{{p}}" required>
 
-        <label for="nationality">Nationality</label>
-        <input type="text" name="nationality" required>
+                <input id="female{{p}}" name="gender{{p}}" value="female" type="radio" required/>
+                <label for="female{{p}}">Female</label>
+                <input id="male{{p}}" name="gender{{p}}" value="male" type="radio" required/>
+                <label for="male{{p}}">Male</label>
 
-        <input id="female" name="gender" value="female" type="radio" required/>
-        <label for="female">Female</label>
-        <input id="male" name="gender" value="male" type="radio" required/>
-        <label for="male">Male</label>
-
-        <label for="email" >Email</label>
-        <input type="email" name="email"/>
-
+                <label for="email{{p}}" >Email</label>
+                <input type="email" name="email{{p}}"/>
+                <br /><br/>
+            </div>
+            {%endfor%}
         <button type="submit">Next</button>
     </form>
 {%endblock%}
