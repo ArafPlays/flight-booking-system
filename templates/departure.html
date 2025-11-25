@@ -2,12 +2,39 @@
 {%block title%}Select Departing Flight{%endblock%}
 {%block body%}
     {% include 'components/breadcrumb.html'%}
-    <div>
-        <h2>Matching flights from {{matching_flights.cityFrom}} to {{matching_flights.cityTo}}: </h2>
-        {%for f in matching_flights%}
-            <p>Flight Number: {{f.num}}, {{f.cityFrom}} to {{f.cityTo}},{{f.departDate}},{{f.departTime}},{{f.arrivalTime}},{{f.fclass}},${{f.price}}
-                <a href='/save_flight/{{f.num}}'">Select</a>
-            </p>
-        {%endfor%}
-    </div>
+    <!-- page heading -->
+    <h2 class="display-4">Flights from {{matching_flights[0].cityFrom}} to {{matching_flights[0].cityTo}}</h2>
+    <p>Depart date: {{matching_flights[0].departDate}}</p>
+    <!-- change search button takes you back to the booking form -->
+    <a href="{{url_for('index')}}"><img src="../static/media/arrow-return-left.svg"/> Change search</a>
+
+    <!-- loop to display all matching flights -->
+    {%for f in matching_flights%}
+        <div class="card px-4 py-4 mt-4">
+            <div class="row card-body">
+                <div class="col">
+                    <p>{{f.cityFrom}}</p>
+                    <p>{{f.departDate}}</p>
+                    <p><b>{{f.departTime}}</b></p>
+                </div>
+                <div class="col">
+                    <p>{{f.cityTo}}</p>
+                    <p>{{f.arrivalDate}}</p>
+                    <p><b>{{f.arrivalTime}}</b></p>
+                </div>
+                <div class="col">
+                    <p>Flight ID: {{f.num}}</p> 
+                    <p><b>Duration: {{f.duration}}</b></p>
+                </div>
+                <div class="col">
+                    <p>{{f.fclass}}</p>
+                    <p><b>${{f.price}}</b></p>
+                </div>
+                <div class="col d-flex align-self-center">
+                    <a href='/save_flight/{{f.num}}' class="btn btn-outline-danger w-100 py-3"><b>SELECT</b></a>
+                </div>
+            </div>
+        </div>
+    {%endfor%}
+    
 {%endblock%}

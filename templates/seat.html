@@ -3,8 +3,10 @@
 {%block body%}
     {% include 'components/breadcrumb.html'%}
 
-    <h2>Choose seat: </h2>
+    <!-- heading -->
+    <h2 class="display-4">Choose Seat</h2>
     <p>1 free seat selection on us.</p>
+
     <!-- tried to use a clean and less repetitive way to display seats -->
     <section id="seatSelector" class="container w-md-50 mt-5">
         <div class="mb-5">
@@ -28,9 +30,9 @@
         <div class="mb-5">
             <p style="text-align:center">Back of Airplane</p>
         </div>
-        <p>Chosen: {{chosenSeat}}</p>
-        <a href="/save-seat/{{chosenSeat}}">Next</a>
-        <a href="/save-seat/NA">Skip</a>
+        
+        <h4>Chosen: {{chosenSeat}}</h4>
+        <a class="btn btn-outline-danger mb-3 mt-3" href="/save-seat/{{chosenSeat}}"><b>CONFIRM SEAT</b></a>
     </section>
     <script src="../static/js/seat.js"></script>
 {%endblock%}

@@ -2,56 +2,83 @@
 {%block title%}Admin{%endblock%}
 {%block body%}
     <form method="post">
-        <h2>Add Flight</h2>
+        <h2 class="display-5 mb-4">Add Flight</h2>
 
-        <label for="cityFrom">From</label>
-        <select name="cityFrom" required>
-            <option value="Sydney">Sydney</option>
-            <option value="Beijing">Beijing</option>
-            <option value="Dhaka">Dhaka</option>
-        </select>
+        <div class="row">
+            <div class="col-md mb-3">
+                <label for="cityFrom" class="form-label">From*</label>
+                <select name="cityFrom" required class="form-select">
+                    <option value="Sydney">Sydney</option>
+                    <option value="Beijing">Beijing</option>
+                    <option value="Dhaka">Dhaka</option>
+                </select>
+            </div>
+            <div class="col-md mb-3">
+                <label for="cityTo" class="form-label">To*</label>
+                <select name="cityTo" required class="form-select">
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Beijing">Beijing</option>
+                    <option value="Sydney">Sydney</option>
+                </select>
+            </div>
 
-        <label for="cityTo">To</label>
-        <select name="cityTo" required>
-            <option value="Dhaka">Dhaka</option>
-            <option value="Beijing">Beijing</option>
-            <option value="Sydney">Sydney</option>
-        </select>
+            <div class="col-md mb-3">
+                <label for="departDate" class="form-label">Depart Date*</label>
+                <input type="date" name="departDate" required class="form-control">
+            </div>
 
-        <label for="departDate">Depart Date</label>
-        <input type="date" name="departDate" required>
+            <div class="col-md mb-3">
+                <label for="arrivalDate" class="form-label">Arrival Date*</label>
+                <input type="date" name="arrivalDate" required class="form-control">
+            </div>
+        
+        </div>
 
-        <label for="arrivalDate">Arrival Date</label>
-        <input type="date" name="arrivalDate" required>
+        <div class="row">
 
-        <label for="departTime" >Depart time</label>
-        <input type="time" name="departTime"/>
+            <div class="col-md mb-3">
+                <label for="departTime" class="form-label">Depart time*</label>
+                <input type="time" name="departTime" class="form-control" required/>
+            </div>
 
-        <label for="arrivalTime" >Arrival time</label>
-        <input type="time" name="arrivalTime"/>
+            <div class="col-md mb-3">
+                <label for="arrivalTime" class="form-label">Arrival time*</label>
+                <input type="time" name="arrivalTime" class="form-control" required/>
+            </div>
 
-        <label for="duration" >Duration</label>
-        <input type="text" name="duration" placeholder="ex: 07h 35m"/>
+            <div class="col-md mb-3">
+                <label for="duration" class="form-label">Duration*</label>
+                <input type="text" name="duration" placeholder="ex: 07h 35m" class="form-control" required/>
+            </div>
 
-        <label for="fclass">Class</label>
-        <select name="fclass" required>
-            <option value="Economy">Economy</option>
-            <option value="Business">Business</option>
-            <option value="First">First Class</option>
-        </select>
+            <div class="col-md mb-3">
+                <label for="fclass" class="form-label">Class*</label>
+                <select name="fclass" required class="form-select">
+                    <option value="Economy">Economy</option>
+                    <option value="Business">Business</option>
+                    <option value="First">First Class</option>
+                </select>
+            </div>
 
-        <label for="price" >Price</label>
-        <input type="number" name="price"/>
+            <div class="col-md mb-3">
+            <label for="price" class="form-label">Price*</label>
+            <input type="number" name="price" class="form-control" placeholder="ex: 200" required/>
+            </div>
 
-        <button type="submit">Add Flight</button>
+            <div class="col-md mb-3 mt-3 align-self-end">
+                <button type="submit" class="btn btn-outline-primary w-100">Add Flight</button>
+            </div>
+
+        </div>
     </form>
+
     <div>
-        <h2>Available flights: </h2>
+        <h2 class="display-5 mt-5 mb-3">Available flights: </h2>
         {%for f in all_flights%}
-            <p>Flight Number: {{f.num}}, {{f.cityFrom}} to {{f.cityTo}},{{f.departDate}},{{f.departTime}},{{f.fclass}},${{f.price}}
-                <a href="/admin/edit/{{f.num}}">Edit</a> 
+            <p>* Flight ID: {{f.num}}, {{f.cityFrom}} to {{f.cityTo}}, {{f.departDate}}, {{f.fclass}}, ${{f.price}}
+                <a class="btn btn-outline-primary" href="/admin/edit/{{f.num}}">Edit</a> 
                 <a href="/admin/delete/{{f.num}}">Delete</a>    
             </p>
         {%endfor%}
-    </div>
+    </div>   
 {%endblock%}

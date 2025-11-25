@@ -1,69 +1,101 @@
 {%extends 'base.html'%}
 {%block title%}Booking Summary{%endblock%}
 {%block body%}
-    <h2>Booking Summary</h2>
+    <h2 class="display-4">Booking Confirmation</h2>
     <!-- query database using flight num saved in session and display flight info + fee here-->
-    <div>
-        <!-- give user the booking id and booking so they can later manage/view the booking-->
-        <p>Booking ID: {{booking.id}}<br/>
-            Booking ref: {{booking.ref}}<br/>
-            <b>* Save these to manage/view the booking.</b>
-        </p>
-        <h4>Travel Summary</h4>
-        <p>
-            Departure Flight:<br/>
-            Flight number: {{depart_flight.num}}<br/>
-            {{depart_flight.cityFrom}} to {{depart_flight.cityTo}}<br/>
-            Flight date: {{depart_flight.departDate}}<br/>
-            Departure Time: {{depart_flight.departTime}}<br/>
-            Arrival date: {{depart_flight.arrivalTime}}<br/>
-        </p>
-        {%if return_flight %}
-        <p>
-            Return flight:<br/>
-            Flight number: {{return_flight.num}}<br/>
-            {{return_flight.cityFrom}} to {{return_flight.cityTo}}<br/>
-            Flight date: {{return_flight.departDate}}<br/>
-            Departure Time: {{return_flight.departTime}}<br/>
-            Arrival date: {{return_flight.arrivalTime}}<br/>
-        </p>
-        {%endif%}
-        <!-- in our case, class has to be same for both flights-->
-         <p>
-            Class: {{depart_flight.fclass}}<br/>
-            Seat number: {{booking.seat}}<br/>
-            Meal: {{booking.meal}}
-        </p>
-    </div>
-    <div>
-        <h4>Fee summary</h4>
-        <p>
-            <!-- multiple cost with passenger num -->
-             <!-- straight line length is the way to length of a list in Jinja-->
-            Departure Flight cost: ${{depart_flight.price}} x {{passengers|length}} = ${{depart_flight.price*passengers|length}}<br/>
-            {%if return_flight %}
-                Return Flight cost: ${{return_flight.price}} x {{passengers|length}} = ${{return_flight.price*passengers|length}}<br/>
-                Total: ${{(depart_flight.price+return_flight.price)*passengers|length}}
-                {%else%}
-                Return Flight cost: N/A <br/>
-                Total: ${{depart_flight.price*passengers|length}}
-            {%endif%}
-        </p>
-    </div>
-    <div>
-        <h4>Passenger(s) summary</h4>
-        <!-- loop through and display all passengers -->
-        {%for p in passengers%}
-            <p>
-                {{p.title}} {{p.fname}} {{p.lname}}<br/>
-                Nationality: {{p.nationality}}</br>
-                Gender: {{p.gender}}</br>
-            </p>
-        {%endfor%}
-        <p>
-            Contact details:<br/>
-            {{booking.email}}<br/>
-            {{booking.phone}}
-        </p>
+    <div class="row mt-4">
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <!-- give user the booking id and booking so they can later manage/view the booking-->
+            <div class="card-body">
+                <h5 class="card-title">Booking Summary</h5>
+                <div class="card-text">
+                    <br/>
+                    <p>Booking ID: {{booking.id}}<br/>
+                        Booking ref: {{booking.ref}}<br/>
+                        <b>* Save these to manage/view the booking.</b>
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Travel Summary</h5>
+                <div class="card-text">
+                    <br/>
+                    <p>
+                        Departure Flight:<br/>
+                        Flight number: {{depart_flight.num}}<br/>
+                        {{depart_flight.cityFrom}} to {{depart_flight.cityTo}}<br/>
+                        Flight date: {{depart_flight.departDate}}<br/>
+                        Departure Time: {{depart_flight.departTime}}<br/>
+                        Arrival date: {{depart_flight.arrivalTime}}<br/>
+                    </p>
+                    {%if return_flight %}
+                    <hr>
+                    <p>
+                        Return flight:<br/>
+                        Flight number: {{return_flight.num}}<br/>
+                        {{return_flight.cityFrom}} to {{return_flight.cityTo}}<br/>
+                        Flight date: {{return_flight.departDate}}<br/>
+                        Departure Time: {{return_flight.departTime}}<br/>
+                        Arrival date: {{return_flight.arrivalTime}}<br/>
+                    </p>
+                    <hr>
+                    {%endif%}
+                    <!-- in our case, class has to be same for both flights-->
+                    <p>
+                        Class: {{depart_flight.fclass}}<br/>
+                        Seat number: {{booking.seat}}<br/>
+                        Meal: {{booking.meal}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Passenger(s) Summary</h5>
+                <div class="card-text">
+                    <br/>
+                    {%for p in passengers%}
+                        <p>
+                            {{p.title}} {{p.fname}} {{p.lname}}<br/>
+                            Nationality: {{p.nationality}}</br>
+                            Gender: {{p.gender}}</br>
+                        </p>
+                        <hr>
+                    {%endfor%}
+                    <p>
+                        Contact details:<br/>
+                        {{booking.email}}<br/>
+                        {{booking.phone}}
+                    </p>
+                </div>
+            </div>
+        </div>  
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Fee Summary</h5>
+                <div class="card-text">
+                    <br/>
+                    <p>
+                        <!-- multiple cost with passenger num -->
+                        <!-- straight line length is the way to length of a list in Jinja-->
+                        Departure Flight cost: ${{depart_flight.price}} x {{passengers|length}} = ${{depart_flight.price*passengers|length}}
+                        <br/>
+                        {%if return_flight %}
+                            Return Flight cost: ${{return_flight.price}} x {{passengers|length}} = ${{return_flight.price*passengers|length}}<br/></i></b>
+                            <br/>
+                            <b><i style="color:#910c00;font-size:18px;">Total: ${{(depart_flight.price+return_flight.price)*passengers|length}}</i></b>
+                        {%else%}
+                            Return Flight cost: N/A 
+                            <br/><br/>
+                            <b ><i style="color:#910c00;font-size:18px;">Total: ${{depart_flight.price*passengers|length}}</i></b>
+                        {%endif%}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 {%endblock%}

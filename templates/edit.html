@@ -1,48 +1,74 @@
 {%extends 'base.html'%}
 {%block title%}Admin{%endblock%}
 {%block body%}
-    <form method="post">
-        <h2>Edit Flight</h2>
+<form method="post">
+        <h2 class="display-5 mb-4">Edit Flight ID {{flight_to_edit.num}}</h2>
 
-        <label for="cityFrom">From</label>
-        <select name="cityFrom" required >
-            <option value="Sydney" {%if flight_to_edit.cityFrom=="Sydney"%}selected{%endif%}>Sydney</option>
-            <option value="Beijing" {%if flight_to_edit.cityFrom=="Beijing"%}selected{%endif%}>Beijing</option>
-            <option value="Dhaka" {%if flight_to_edit.cityFrom=="Dhaka"%}selected{%endif%}>Dhaka</option>
-        </select>
+        <div class="row">
+            <div class="col-md mb-3">
+                <label for="cityFrom" class="form-label">From</label>
+                <select name="cityFrom" required class="form-select">
+                    <option value="Sydney" {%if flight_to_edit.cityFrom=="Sydney"%}selected{%endif%}>Sydney</option>
+                    <option value="Beijing" {%if flight_to_edit.cityFrom=="Beijing"%}selected{%endif%}>Beijing</option>
+                    <option value="Dhaka" {%if flight_to_edit.cityFrom=="Dhaka"%}selected{%endif%}>Dhaka</option>
+                </select>
+            </div>
+            <div class="col-md mb-3">
+                <label for="cityTo" class="form-label">To</label>
+                <select name="cityTo" required class="form-select">
+                    <option value="Dhaka" {%if flight_to_edit.cityTo=="Dhaka"%}selected{%endif%}>Dhaka</option>
+                    <option value="Beijing" {%if flight_to_edit.cityTo=="Beijing"%}selected{%endif%}>Beijing</option>
+                    <option value="Sydney" {%if flight_to_edit.cityTo=="Sydney"%}selected{%endif%}>Sydney</option>
+                </select>
+            </div>
 
-        <label for="cityTo">To</label>
-        <select name="cityTo" required>
-            <option value="Dhaka" {%if flight_to_edit.cityTo=="Dhaka"%}selected{%endif%}>Dhaka</option>
-            <option value="Beijing" {%if flight_to_edit.cityTo=="Beijing"%}selected{%endif%}>Beijing</option>
-            <option value="Sydney" {%if flight_to_edit.cityTo=="Sydney"%}selected{%endif%}>Sydney</option>
-        </select>
+            <div class="col-md mb-3">
+                <label for="departDate" class="form-label">Depart Date</label>
+                <input type="date" name="departDate" required class="form-control" value="{{flight_to_edit.departDate}}">
+            </div>
 
-        <label for="departDate">Depart Date</label>
-        <input type="date" name="departDate" required value="{{flight_to_edit.departDate}}">
+            <div class="col-md mb-3">
+                <label for="arrivalDate" class="form-label">Arrival Date</label>
+                <input type="date" name="arrivalDate" required class="form-control" value="{{flight_to_edit.arrivalDate}}">
+            </div>
+        
+        </div>
 
-        <label for="arrivalDate">Arrival Date</label>
-        <input type="date" name="arrivalDate" required value="{{flight_to_edit.arrivalDate}}">
+        <div class="row">
 
-        <label for="departTime" >Depart time</label>
-        <input type="time" name="departTime" value="{{flight_to_edit.departTime}}" />
+            <div class="col-md mb-3">
+                <label for="departTime" class="form-label">Depart time</label>
+                <input type="time" name="departTime" class="form-control" value="{{flight_to_edit.departTime}}" />
+            </div>
 
-        <label for="arrivalTime" >Arrival time</label>
-        <input type="time" name="arrivalTime" value="{{flight_to_edit.arrivalTime}}"/>
+            <div class="col-md mb-3">
+                <label for="arrivalTime" class="form-label">Arrival time</label>
+                <input type="time" name="arrivalTime" class="form-control" value="{{flight_to_edit.arrivalTime}}" />
+            </div>
 
-        <label for="duration" >Duration</label>
-        <input type="text" name="duration" placeholder="ex: 07h 35m" value="{{flight_to_edit.duration}}"/>
+            <div class="col-md mb-3">
+                <label for="duration" class="form-label">Duration</label>
+                <input type="text" name="duration" placeholder="ex: 07h 35m" class="form-control" value="{{flight_to_edit.duration}}" />
+            </div>
 
-        <label for="fclass">Class</label>
-        <select name="fclass" required>
-            <option value="Economy" {%if flight_to_edit.fclass=="Economy"%}selected{%endif%}>Economy</option>
-            <option value="Business" {%if flight_to_edit.fclass=="Business"%}selected{%endif%}>Business</option>
-            <option value="First" {%if flight_to_edit.fclass=="First"%}selected{%endif%}>First Class</option>
-        </select>
+            <div class="col-md mb-3">
+                <label for="fclass" class="form-label">Class</label>
+                <select name="fclass" required class="form-select">
+                    <option value="Economy" {%if flight_to_edit.fclass=="Economy"%}selected{%endif%}>Economy</option>
+                    <option value="Business" {%if flight_to_edit.fclass=="Business"%}selected{%endif%}>Business</option>
+                    <option value="First" {%if flight_to_edit.fclass=="First"%}selected{%endif%}>First Class</option>
+                </select>
+            </div>
 
-        <label for="price" >Price</label>
-        <input type="number" name="price" value="{{flight_to_edit.price}}"/>
+            <div class="col-md mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" name="price" class="form-control" value="{{flight_to_edit.price}}" />
+            </div>
 
-        <button type="submit">Edit Flight</button>
+            <div class="col-md mb-3 mt-3 align-self-end">
+                <button type="submit" class="btn btn-outline-primary w-100">Save changes</button>
+            </div>
+
+        </div>
     </form>
 {%endblock%}

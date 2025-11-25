@@ -2,29 +2,48 @@
 {%block title%}Meal Selection{%endblock%}
 {%block body%}
     {% include 'components/breadcrumb.html'%}
-    <h2>Choose meal: </h2>
-    <div>
-        <img src="no-preference.png"/>
-        <h3>No Preference</h3>
-        <p>This option indicates the passenger has no specific dietary restrictions or requirements. The airline may serve the standard in-flight meal available to all passengers.</p>
-        <a href="/meal/no-preference">Select</a>
-    </div>
-    <div>
-        <img src="no-preference.png"/>
-        <h3>Halal Meal</h3>
-        <p>This option indicates the passenger has no specific dietary restrictions or requirements. The airline may serve the standard in-flight meal available to all passengers.</p>
-        <a href="/meal/halal">Select</a>
-    </div>
-    <div>
-        <img src="no-preference.png"/>
-        <h3>Kosher Meal</h3>
-        <p>This option indicates the passenger has no specific dietary restrictions or requirements. The airline may serve the standard in-flight meal available to all passengers.</p>
-        <a href="/meal/kosher">Select</a>
-    </div>
-    <div>
-        <img src="no-preference.png"/>
-        <h3>Veg Meal</h3>
-        <p>This option indicates the passenger has no specific dietary restrictions or requirements. The airline may serve the standard in-flight meal available to all passengers.</p>
-        <a href="/meal/veg">Select</a>
+    <h2 class="display-4 mb-4">Choose Meal</h2>
+
+    <div class="row meal">
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card">
+            <img src="../static/media/meal/skip.jpg" class="card-img-top" height="200px">
+            <div class="card-body mx-2">
+                <h5 class="card-title">No Preference</h5>
+                <p class="card-text">This option indicates the passenger has no specific dietary restrictions or requirements. The airline may serve the standard in-flight meal available to all passengers.</p>
+                <a href="/meal/no-preference" class="btn btn-outline-danger w-100 mt-2"><b>CHOOSE DEFAULT</b></a>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card">
+                <img src="../static/media/meal/halal.jpg" class="card-img-top">
+            <div class="card-body mx-2">
+                <h5 class="card-title">Halal Meal</h5>
+                <p class="card-text">Prepared according to Islamic dietary laws, halal meals use ingredients and cooking methods permitted. They exclude pork, alcohol, and ensure meat is sourced in a prescribed manner.</p>
+                <a href="/meal/halal" class="btn btn-outline-danger w-100 mt-2"><b>CHOOSE HALAL</b></a>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card">
+                <img src="../static/media/meal/kosher.jpg" class="card-img-top">
+            <div class="card-body mx-2">
+                <h5 class="card-title">Kosher Meal</h5>
+                <p class="card-text">Kosher meals follow Jewish dietary laws, ensuring food is prepared under rabbinical supervision. They exclude pork, shellfish, and prevent the mixing of meat and dairy products.</p>
+                <a href="/meal/kosher" class="btn btn-outline-danger w-100 mt-2"><b>CHOOSE KOSHER</b></a>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card">
+                <img src="../static/media/meal/veg.jpg" class="card-img-top">
+            <div class="card-body mx-2">
+                <h5 class="card-title">Vegetarian Meal</h5>
+                <p class="card-text">A vegetarian meal contains no meat, fish, or poultry and focuses on plant-based ingredients like vegetables, grains, and legumes. It is suitable for passengers who prefer or require a meat-free diet.</p>
+                <a href="/meal/veg" class="btn btn-outline-danger w-100 mt-2"><b>CHOOSE VEG</b></a>
+            </div>
+            </div>
+        </div>
     </div>
 {%endblock%}

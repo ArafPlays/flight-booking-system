@@ -3,42 +3,94 @@
 {%block body%}
     {% include 'components/breadcrumb.html'%}
 
-    <h2>Check Details & Make Payment</h2>
-    <!-- query database using flight num saved in session and display flight info + fee here-->
-    <div>
-        <h4>Travel Summary</h4>
-        <p>Departure flight:</p>
-        <p>Flight number: {{flight.num}}</p>
-        <p>{{flight.cityFrom}} to {{flight.cityTo}}</p>
-        <p>Flight date: {{flight.departDate}}</p>
-        <p>Departure Time: {{flight.departTime}}</p>
-        <p>Arrival date: {{flight.arrivalTime}}</p>
-        <p>Class: {{flight.fclass}}</p>
-        <p>Seat number: {{session.chosenSeat}}</p>
-        <p>Meal: {{session.preference}}</p>
-    </div>
-    <div>
-        <h4>Fee summary</h4>
-        <p>Departure Flight cost: ${{flight.price}}</p>
-        <p>Return Flight cost: $</p>
-    </div>
-    <div>
-        <h4>Passenger summary</h4>
-        <p>{{session.title}} {{session.fname}} {{session.lname}}</p>
-        <p>{{session.phone}}</p>
-        <p>{{session.email}}</p>
-    </div>
-    <div>
-        <h4>Payment</h4>
-        <p>Payment not supported, just click complete booking.</p>
-        <form method="POST">
-            <label for="card_num">Card number</label>
-            <input name="card_num" type="number" disabled/>
-            <label for="exp_date">Exp Date</label>
-            <input name="exp_date" type="date" disabled/>
-            <label for="cvv">CVV</label>
-            <input name="cvv" type="number" disabled/>
-            <input type="submit" value="Complete booking"/>
-        </form>
+    <h2 class="display-4">Check Details & Make Payment</h2>
+    <div class="row mt-4">
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Travel Summary</h5>
+                <div class="card-text">
+                    <br/>
+                    <p>
+                        Departure flight:<br/>
+                        Flight number: {{flight.num}}<br/>
+                        {{flight.cityFrom}} to {{flight.cityTo}}<br/>
+                        Flight date: {{flight.departDate}}<br/>
+                        Departure Time: {{flight.departTime}}<br/>
+                        Arrival date: {{flight.arrivalDate}}<br/>
+                        Arrival time: {{flight.arrivalTime}}<br/>
+                        {%if return_flight %}
+                            <hr>
+                            Return flight:<br/>
+                            Flight number: {{return_flight.num}}<br/>
+                            {{return_flight.cityFrom}} to {{return_flight.cityTo}}<br/>
+                            Flight date: {{return_flight.departDate}}<br/>
+                            Departure Time: {{return_flight.departTime}}<br/>
+                            Arrival date: {{return_flight.arrivalDate}}<br/>
+                            Arrival time: {{flight.arrivalTime}}<br/>
+                        {%endif%}
+                        <hr>
+                        <p>
+                            Class: {{flight.fclass}}<br/>
+                            Seat number: {{session.chosenSeat}}<br/>
+                            Meal: {{session.preference}}<br/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Passenger(s) Summary</h5>
+                <div class="card-text">
+                    <p>
+                        Passenger num: {{session.passenger_num}}
+                        <br/>
+                        Phone: {{session.phone}}
+                        <br/>
+                        Email: {{session.email}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Travel Summary</h5>
+                <div class="card-text">
+                    <p>
+                        Departure Flight cost: ${{flight.price}} x {{session.passenger_num}} = ${{flight.price*session.passenger_num}}
+                        <br/>
+                        {%if return_flight %}
+                            Return Flight cost: ${{return_flight.price}} x {{session.passenger_num}} = ${{return_flight.price*session.passenger_num}}
+                            <br/><br/>
+                            <b ><i style="color:#910c00;font-size:18px;">Total: ${{(flight.price+return_flight.price)*session.passenger_num}}</i></b>
+                        {%else%}
+                            Return Flight cost: NA
+                            <br/><br/>
+                            <b ><i style="color:#910c00;font-size:18px;">Total: ${{flight.price*session.passenger_num}}</i></b>
+                        {%endif %}
+                    </p>
+                </div>
+                </div>
+        </div>
+
+        <div class="card col-md-6 col-lg-3 mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Passenger(s) Summary</h5>
+                <div class="card-text">
+                    <br/>
+                    <p>* Payment not supported, just click confirm.</p>
+                    <form method="POST">
+                        <label for="card_num" class="form-label">Card number</label>
+                        <input name="card_num" type="number" disabled class="form-control"/>
+                        <label for="exp_date" class="form-label">Exp Date</label>
+                        <input name="exp_date" type="date" disabled class="form-control"/>
+                        <label for="cvv" class="form-label">CVV</label>
+                        <input name="cvv" type="number" disabled class="form-control"/>
+                        <button type="submit" class="btn btn-outline-danger mt-4"><b>CONFIRM</b></button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 {%endblock%}

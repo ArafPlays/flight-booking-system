@@ -6,8 +6,8 @@
 
     
     <!-- take user to confirmed function along with url query parameters -->
-    <a href="{{url_for('confirmed',booking_id=booking.id,booking_ref=booking.ref)}}">View booking details</a>
-    
+    <a href="{{url_for('confirmed',booking_id=booking.id,booking_ref=booking.ref)}}">View full booking details</a>
+    <br/><br/>
     <form method="post">
         <!-- update contact (email,phone) details -->
         <div>
@@ -17,6 +17,8 @@
             <label for="phone" >Phone: </label>
             <input type="tel" name="phone" value="{{booking.phone}}"/><br/>
         </div>
+
+        <br/>
         
         <div>
             <h4>Update passenger details</h4>
@@ -41,7 +43,10 @@
             <br/>
         </div>
 
-        <button type="submit">Confirm changes</button>
+        <br/>
+
+        <button type="submit" class="btn btn-outline-danger">Save Changes</button>
     </form>
-    <a href="{{url_for('cancel',booking_id=booking.id,booking_ref=booking.ref)}}">Cancel Booking</a>
+    <br/>
+    <a href="{{url_for('cancel',booking_id=booking.id,booking_ref=booking.ref)}}">Delete Booking</a>
 {%endblock%}

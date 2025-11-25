@@ -2,12 +2,13 @@
 {%block title%}Create Admin Account{%endblock%}
 {%block body%}
     <form method="post">
-        <h2>Create Admin Account</h2>
+        <h2 class="display-5">Create Admin Account</h2>
         <p>Note: Username needs to be unique.</p>
-        <label for="username">Username:</label>
-        <input type="text" name="username"/>
-        <label for="password">Password:</label>
-        <input type="password" name="password"/>
-        <button type="submit">Register</button>
+        <label for="username" class="form-label mt-3">Username:</label>
+        <input type="text" name="username" class="form-control mb-3"/>
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" name="password" class="form-control mb-3"/>
+        <button type="submit" class="btn btn-outline-danger mb-3">Register</button>
     </form>
+    <a href="{{url_for('login')}}">Login instead</a>
 {%endblock%}

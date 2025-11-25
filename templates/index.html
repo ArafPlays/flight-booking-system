@@ -1,44 +1,72 @@
 {%extends 'base.html'%}
 {%block title%}Booking Page{%endblock%}
 {%block body%}
-    <form method="post">
-        <h2>Where do you want to go?</h2>
-        <label for="cityFrom">From</label>
-        <select name="cityFrom" required>
-            <option value="Sydney">Sydney</option>
-            <option value="Beijing">Beijing</option>
-            <option value="Dhaka">Dhaka</option>
-        </select>
+    <form method="post" style="background-color: #910c00;color:white" class="px-md-5 px-4 py-4 mb-3">
+        <h2 class="display-5 mb-4">Where to..?</h2>
+        <div class="row">
+            <div class="col-md mb-3">
+                <label for="cityFrom" class="form-label">From*</label>
+                <select name="cityFrom" required class="form-select">
+                    <option value="Sydney">Sydney</option>
+                    <option value="Beijing">Beijing</option>
+                    <option value="Dhaka">Dhaka</option>
+                </select>
+            </div>
 
-        <label for="cityTo">From</label>
-        <select name="cityTo" required>
-            <option value="Dhaka">Dhaka</option>
-            <option value="Beijing">Beijing</option>
-            <option value="Sydney">Sydney</option>
-        </select>
+            <div class="col-md mb-3">
+                <label for="cityTo" class="form-label">To*</label>
+                <select name="cityTo" required class="form-select">
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Beijing">Beijing</option>
+                    <option value="Sydney">Sydney</option>
+                </select>
+            </div>
 
-        <label for="departDate">Depart Date</label>
-        <input type="date" name="departDate" required>
+            <div class="col-md mb-3">
+                <label for="departDate" class="form-label">Depart Date*</label>
+                <input type="date" name="departDate" required class="form-control">
+            </div>
 
-        <label for="returnDate">Return Date</label>
-        <input type="date" name="returnDate">
+            <div class="col-md mb-3">
+                <label for="returnDate" class="form-label">Return Date</label>
+                <input type="date" name="returnDate" class="form-control">
+            </div>
+        </div>
+        <!-- end of row 1-->
 
-        <label for="fclass">Class</label>
-        <select name="fclass" required>
-            <option value="Economy">Economy</option>
-            <option value="Business">Business</option>
-            <option value="First">First Class</option>
-        </select>
+        <!-- start of row 1-->
+        <div class="row">
+            <div class="col-md mb-3">
+                <label for="fclass" class="form-label">Class*</label>
+                <select name="fclass" required class="form-select">
+                    <option value="Economy">Economy</option>
+                    <option value="Business">Business</option>
+                    <option value="First">First Class</option>
+                </select>
+            </div>
 
-        <label for="passenger_num" >Passengers</label>
-        <select name="passenger_num" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-
-        <button type="submit">Search</button>
+            <div class="col-md mb-3">
+                <label for="passenger_num" class="form-label">Passengers*</label>
+                <select name="passenger_num" required class="form-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="col-md mb-3 mt-3 align-self-end">
+                <button type="submit" class="btn btn-outline-light w-100"><b>SEARCH</b></button>
+            </div>
+        </div>
     </form>
+
+    <div>
+        <h2 class="display-5 mt-5 mb-3">Available flights: </h2>
+        <p>Feel free to create your own flights in <a href="{{url_for('admin')}}">admin panel.</a></p>
+        {%for f in all_flights%}
+            <p>* Flight ID: {{f.num}}, {{f.cityFrom}} to {{f.cityTo}}, {{f.departDate}}, {{f.fclass}}, ${{f.price}} 
+            </p>
+        {%endfor%}
+    </div>  
 {%endblock%}

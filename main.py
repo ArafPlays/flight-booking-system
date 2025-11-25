@@ -84,7 +84,8 @@ class Admin(db.Model,UserMixin):
 @app.route("/",methods=['GET','POST'])
 def index():
     if request.method=='GET':
-        return render_template('index.html')
+        all_flights = Flight.query.all()
+        return render_template('index.html',all_flights=all_flights)
     elif request.method=='POST':
         # clear session first to avoid any collisions
         session.clear()
@@ -101,9 +102,13 @@ def index():
 @app.route("/departure")
 def departure():
     # query flights database and show flights that match
-    matching_flights = Flight.query.filter_by(cityFrom=session['cityFrom'],cityTo=session['cityTo'],departDate=session['departDate'],fclass=session['fclass'])
-    return render_template('departure.html',matching_flights=matching_flights)
-
+    matching_flights = Flight.query.filter_by(cityFrom=session['cityFrom'],cityTo=session['cityTo'],departDate=session['departDate'],fclass=session['fclass']).all()
+    if matching_flights:
+        return render_template('departure.html',matching_flights=matching_flights)
+    else:
+        flash("Sorry, no departure flight found. Change your search or create your own flight in admin panel (for testing).")
+        return redirect(url_for('index'))
+    
 @app.route("/return-flight")
 def return_flight():
     # flip cityTo and cityFrom
@@ -113,8 +118,12 @@ def return_flight():
     fclass=session['fclass']
     # query flights database and show flights that match
     # this flight will depart on the user selected return date
-    matching_flights = Flight.query.filter_by(cityFrom=cityFrom,cityTo=cityTo,departDate=returnDate,fclass=fclass)
-    return render_template('departure.html',matching_flights=matching_flights)
+    matching_flights = Flight.query.filter_by(cityFrom=cityFrom,cityTo=cityTo,departDate=returnDate,fclass=fclass).all()
+    if matching_flights:
+        return render_template('departure.html',matching_flights=matching_flights)
+    else:
+        flash("Sorry, no return flight found. Change your search or create your own flight in admin panel (for testing).")
+        return redirect(url_for('index'))
 
 # this function saves both selected departing and returning flight. Saves space rather than having 2 separate functions
 @app.route("/save_flight/<int:num>")
@@ -187,11 +196,15 @@ def payment():
         # get flight info
         flight_num = session['num']
         flight = Flight.query.filter_by(num=flight_num).first()
-        # get meal and seat number
-        # preference = session['preference']
-        # chosenSeat = session['chosenSeat']
-        # passing session automatically sends all session data, no need to create variables and send individually
-        return render_template('payment.html',flight=flight,session=session)
+
+        if session['returnDate'] != "":
+            return_num = session['return_num']
+            return_flight = Flight.query.filter_by(num=return_num).first()
+        else:
+            return_flight=0
+        
+        return render_template('payment.html',flight=flight,return_flight=return_flight)
+        
     elif request.method=='POST':
         # save to database
         
@@ -347,7 +360,7 @@ def admin():
             # refresh the page
             return redirect(url_for('admin'))
     else:
-        flash("Please login to access admin panel")
+        flash("Please login or create account to access admin panel")
         return redirect(url_for('login'))
 
 # delete a flight from admin panel

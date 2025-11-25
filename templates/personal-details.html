@@ -4,40 +4,66 @@
     {% include 'components/breadcrumb.html'%}
 
     <form method="post">
-        <h2>Personal Details</h2>
+        <!-- heading -->
+        <h2 class="display-4 mb-4">Passenger(s) Details</h2>
+
         <!-- display this form multiple times based on passenger num-->
         <!-- add p (num) in input for so we can differentiate passengers -->
         {%for p in range(passenger_num)%}
-            <div>
-                <label for="title">Title</label>
-                <!-- note: in Jinja, single bracket is used for logic. double bracket is used to inject variables-->
-                <select name="title{{p}}" required>
-                    <option value="Mrs.">Mrs.</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Dr.">Dr.</option>
-                </select>
+        <div class="card px-4 py-4 mb-4">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="title" class="form-check-label">Title*</label>
+                    <!-- note: in Jinja, single bracket is used for logic. double bracket is used to inject variables-->
+                    <select name="title{{p}}" required class="form-select">
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Mr.">Mr.</option>
+                        <option value="Dr.">Dr.</option>
+                    </select>
+                </div>
 
-                <label for="fname{{p}}">First name</label>
-                <input type="text" name="fname{{p}}" required>
+                <div class="col-md-4 mb-3">
+                    <label for="fname{{p}}" class="form-label">First name*</label>
+                    <input type="text" name="fname{{p}}" required class="form-control">
+                </div>
 
-                <label for="lname{{p}}">Last name</label>
-                <input type="text" name="lname{{p}}" required>
-
-                <label for="nationality{{p}}">Nationality</label>
-                <input type="text" name="nationality{{p}}" required>
-
-                <input id="female{{p}}" name="gender{{p}}" value="female" type="radio" required/>
-                <label for="female{{p}}">Female</label>
-                <input id="male{{p}}" name="gender{{p}}" value="male" type="radio" required/>
-                <label for="male{{p}}">Male</label>
-                <br /><br/>
+                <div class="col-md-4 mb-3">
+                    <label for="lname{{p}}" class="form-label">Last name*</label>
+                    <input type="text" name="lname{{p}}" required class="form-control">
+                </div>
             </div>
-            {%endfor%}
-            <label for="email">Email:</label>
-            <input type="email" name="email"/>
-            <br/>
-            <label for="phone">Phone:</label>
-            <input type="tel" name="phone"/>
-        <button type="submit">Next</button>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nationality{{p}}" class="form-label">Nationality*</label>
+                    <input type="text" name="nationality{{p}}" required class="form-control">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <p>Gender*</p>
+                    <input id="female{{p}}" name="gender{{p}}" value="female" type="radio" required class="form-check-input"/>
+                    <label for="female{{p}}" class="form-check-label">Female</label>
+                    <br/>
+                    <input id="male{{p}}" name="gender{{p}}" value="male" type="radio" required class="form-check-input"/>
+                    <label for="male{{p}}" class="form-check-label">Male</label>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+        <div class="px-4 py-4 mb-4 card">
+            <p><img src="../static/media/telephone.svg"/> Contact details</p>
+            <div class="row mt-2">
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email*</label>
+                    <input type="email" name="email" class="form-control"/>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Phone*</label>
+                    <input type="tel" name="phone" class="form-control"/>
+                </div>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-outline-danger"><b>CONFIRM</b></button>
     </form>
 {%endblock%}

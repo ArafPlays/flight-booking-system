@@ -2,11 +2,12 @@
 {%block title%}Personal Details{%endblock%}
 {%block body%}
     <form method="post">
-        <label for="booking_id" >Booking ID:</label>
-        <input type="number" name="booking_id"/>
+        <h2 class="display-4 mb-4">Manage Booking</h2>
+        <label for="booking_id" class="form-label">Booking ID:</label>
+        <input type="number" name="booking_id" class="form-control"/>
         <br />
-        <label for="booking_ref" >Booking Ref:</label>
-        <input type="number" name="booking_ref"/>
-        <button type="submit">Next</button>
+        <label for="booking_ref" class="form-label">Booking Ref:</label>
+        <input type="number" name="booking_ref" class="form-control"/>
+        <button class="btn btn-outline-danger mt-3" type="submit">Next</button>
     </form>
 {%endblock%}
