@@ -12,26 +12,23 @@
     {%for f in matching_flights%}
         <div class="card px-4 py-4 mt-4">
             <div class="row card-body">
-                <div class="col">
-                    <p>{{f.cityFrom}}</p>
-                    <p>{{f.departDate}}</p>
-                    <p><b>{{f.departTime}}</b></p>
+                <div class="col-6 col-md-3">
+                    <p>{{f.cityFrom}}<br/>
+                    {{f.departDate}}<br/>
+                    <b>{{f.departTime}}</b></p>
                 </div>
-                <div class="col">
-                    <p>{{f.cityTo}}</p>
-                    <p>{{f.arrivalDate}}</p>
-                    <p><b>{{f.arrivalTime}}</b></p>
+                <div class="col-md-3 col-6">
+                    <p>{{f.cityTo}}<br/>
+                    {{f.arrivalDate}}<br/>
+                    <b>{{f.arrivalTime}}</b></p>
                 </div>
-                <div class="col">
-                    <p>Flight ID: {{f.num}}</p> 
-                    <p><b>Duration: {{f.duration}}</b></p>
+                <div class="col-6 col-md-3">
+                    <p>Flight ID: {{f.num}}<br/>
+                    {{f.duration}}<br/>
+                    <b>{{f.fclass}}, ${{f.price}}</b></p>
                 </div>
-                <div class="col">
-                    <p>{{f.fclass}}</p>
-                    <p><b>${{f.price}}</b></p>
-                </div>
-                <div class="col d-flex align-self-center">
-                    <a href='/save_flight/{{f.num}}' class="btn btn-outline-danger w-100 py-3"><b>SELECT</b></a>
+                <div class="col-6 col-md-3 align-self-center">
+                    <a href='/save_flight/{{f.num}}' class="btn btn-outline-primary w-100 py-3"><b>SELECT</b></a>
                 </div>
             </div>
         </div>

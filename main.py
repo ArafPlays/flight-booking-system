@@ -282,7 +282,8 @@ def manage(booking_id,booking_ref):
         if booking and booking.ref == booking_ref:
             passengers = booking.passengers
             return render_template('manage.html',booking=booking,passengers=passengers)
-        return f"Booking id or reference isn't correct"
+        flash("Booking id or reference isn't correct")
+        return redirect(url_for('manage_form'))
     elif request.method=='POST':
         booking = Booking.query.filter_by(id=booking_id).first()
         # get new info from input tags and update table
@@ -415,6 +416,12 @@ def create():
             # get username and pass that user
             username=request.form['username']
             password=request.form['password']
+
+            # if username already exists, flash a message and redirect to create account page
+            if Admin.query.filter_by(username=username).first():
+                flash("Username already exists")
+                return redirect(url_for('create'))
+            
             # generate hash from password using bcrypt
             hash = bcrypt.generate_password_hash(password).decode('utf-8')
             # add new admin to database
@@ -461,4 +468,4 @@ def logout():
 if __name__=="__main__":
     with app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0',port=8000)
+    app.run(host='0.0.0.0')
