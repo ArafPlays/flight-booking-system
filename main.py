@@ -186,7 +186,7 @@ def meal():
 @app.route("/meal/<preference>")
 def save_meal(preference):
     # save meal to session
-    session['preference'] = preference
+    session['preference'] = preference.capitalize()
     # redirect to next page
     return redirect(url_for('payment'))
 
