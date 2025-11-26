@@ -6,7 +6,8 @@
         <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     </head>
-    <body>
+    <!-- used boostrap classes to put footer to bottom of page -->
+    <body class="d-flex flex-column min-vh-100">
         <!-- navigation bar -->
         <nav id="book-nav" class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
@@ -52,7 +53,8 @@
             {% endwith %}
 
         <!-- this is where main html code will be injected from other pages -->
-        <div class="container px-md-3 px-3 py-3 mb-3">
+         <!-- flex-fill boostrap class to fill up the page and put footer to bottom of page -->
+        <div class="container px-md-3 px-3 py-3 mb-3 flex-fill">
             {%block body%}{%endblock%}
         </div>
 
