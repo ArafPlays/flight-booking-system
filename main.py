@@ -316,7 +316,9 @@ def cancel(booking_id,booking_ref):
             for p in passengers:
                 db.session.delete(p)
             db.session.commit()
-            return "Deleted booking and passenger records!"
+            # after deleting booking, send them to homepage with a flash message.
+            flash("Successfully deleted booking and passenger records.")
+            return redirect(url_for('index'))
         else:
             return f"Booking id or reference isn't correct"
     except Exception as e:
@@ -469,4 +471,4 @@ def logout():
 if __name__=="__main__":
     with app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',port=8000,debug=True)
