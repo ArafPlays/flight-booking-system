@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 
 import random # to generate a random booking reference number
+from datetime import datetime # for working with dates and time
 
 # imports for admin user authentication and hashing
 # loginManager only handles when you're logged in/logged out and who the current logged in user is. It stores these in sessions.
@@ -29,7 +30,8 @@ class Flight(db.Model):
     arrivalDate=db.Column("arrivalDate",db.String(10), nullable=False)
     departTime = db.Column("departTime",db.String(10), nullable=False)
     arrivalTime= db.Column("arrivalTime",db.String(10), nullable=False)
-    duration= db.Column("duration",db.String(10), nullable=False)
+    # db.Interval is good for storing difference between dates or time. DateTime() is better for specific dates.
+    duration= db.Column("duration",db.Interval, nullable=False)
     fclass = db.Column("fclass",db.String(10), nullable=False)
     price= db.Column("price",db.Integer, nullable=False)
 
@@ -97,7 +99,7 @@ def index():
             return redirect(url_for('index'))
         
         # check if return date comes before departure date
-        if request.form['departDate']>request.form['returnDate']:
+        if request.form['returnDate'] and request.form['departDate']>request.form['returnDate']:
             # flash message 
             flash("Depart date must come before return date.")
             return redirect(url_for('index'))
@@ -379,7 +381,10 @@ def admin():
             departTime = request.form['departTime']
             arrivalTime = request.form['arrivalTime']
             fclass = request.form['fclass']
-            duration = request.form['duration']
+
+            # use calculateDuration function below to calculate difference
+            duration=calculateDuration(departDate,departTime,arrivalDate,arrivalTime)
+
             price = request.form['price']
             new_flight = Flight(cityFrom=cityFrom,cityTo=cityTo,departDate=departDate,arrivalDate=arrivalDate,departTime=departTime,arrivalTime=arrivalTime,duration=duration,fclass=fclass,price=price)
             db.session.add(new_flight)
@@ -403,6 +408,18 @@ def delete(num):
         return redirect(url_for('admin'))
     else:
         return "Flight doesn't exist"
+    
+# used when creating and editing flights (admin and edit functions/pages).
+def calculateDuration(departDate,departTime,arrivalDate,arrivalTime):
+    depart = departDate + " " + departTime
+    depart = datetime.strptime(depart,"%Y-%m-%d %H:%M")
+
+    arrival = arrivalDate + " " + arrivalTime
+    arrival = datetime.strptime(arrival,"%Y-%m-%d %H:%M")
+
+    duration = arrival-depart
+    return duration
+
 
 # edit a flight from admin panel
 @app.route('/admin/edit/<int:num>',methods=['GET','POST'])
@@ -433,14 +450,16 @@ def edit(num):
             flight_to_edit.departTime=request.form['departTime']
             flight_to_edit.arrivalTime=request.form['arrivalTime']
             flight_to_edit.fclass=request.form['fclass']
-            flight_to_edit.duration=request.form['duration']
             flight_to_edit.price=request.form['price']
+
+            # use calculateDuration function below to calculate difference
+            flight_to_edit.duration=calculateDuration(flight_to_edit.departDate,flight_to_edit.departTime,flight_to_edit.arrivalDate,flight_to_edit.arrivalTime)
+            
             db.session.commit()
             flash("Changes saved.")
             return redirect(url_for('admin'))
     else:
         return "Flight doesn't exist"
-
 
 # create new admin account
 @app.route('/admin/create',methods=['GET','POST'])

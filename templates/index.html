@@ -65,7 +65,7 @@
         <h2 class="display-5 mt-5 mb-3">Available flights: </h2>
         <p>Feel free to create your own flights in <a href="{{url_for('admin')}}">admin panel.</a></p>
         {%for f in all_flights%}
-            <p>* Flight ID: {{f.num}}, {{f.cityFrom}} to {{f.cityTo}}, {{f.departDate}}, {{f.fclass}}, ${{f.price}} 
+            <p>* Flight ID: {{f.num}}, {{f.cityFrom}} to {{f.cityTo}}, {{f.departDate}}, {{f.fclass}}, ${{f.price}}, Duration: {{f.duration}}
             </p>
         {%endfor%}
     </div>  
