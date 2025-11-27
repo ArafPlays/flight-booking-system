@@ -19,7 +19,7 @@ app=Flask(__name__)
 # key and database url is secured in deployment but a default key and SQLite database url is provided for local use.
 app.secret_key = os.environ.get("SECRET_KEY","testKey129Q$@$()")
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL","sqlite:///test.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("TURSO_DATABASE_URL","sqlite:///test.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db=SQLAlchemy(app)
 
