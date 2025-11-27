@@ -88,6 +88,9 @@ class Admin(db.Model,UserMixin):
     # bcrypt character is 60 characters
     hash=db.Column('hash',db.String(60),nullable=False)
 
+with app.app_context():
+    db.create_all()
+
 @app.route("/",methods=['GET','POST'])
 def index():
     if request.method=='GET':
@@ -530,7 +533,5 @@ def logout():
     flash('Successfully logged out.')
     return redirect(url_for('login'))
     
-if __name__=="__main__":
-    with app.app_context():
-        db.create_all()
+if __name__== "__main__":
     app.run(host='0.0.0.0')
