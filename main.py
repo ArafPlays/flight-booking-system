@@ -16,10 +16,11 @@ import os
 
 app=Flask(__name__)
 
-# adding environment variables
+# environment variable for session key. Also a default key for local users.
 app.secret_key = os.environ.get("SECRET_KEY",'mjrajrjk294999$(@(@(.)))')
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("TURSO_DATABASE_URL","sqlite:///test.db")
+# environment variable for database url. Also a default sqlite db for local users
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL","sqlite:///test.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db=SQLAlchemy(app)
 
@@ -532,4 +533,4 @@ def logout():
 if __name__=="__main__":
     with app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',port=8000)
