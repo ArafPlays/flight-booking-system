@@ -22,4 +22,4 @@ LOCAL SET UP INSTRUCTIONS:
    pip install -r requirements.txt
 
 5. Run the app:
-   python main.py
+   flask run
