@@ -70,7 +70,7 @@ class Booking(db.Model):
     depart_flight_num=db.Column(db.Integer,db.ForeignKey('flight.num'),nullable=False)
     # using 2 foreign key to same key will cause an error here, 
     # we need to specify
-    return_flight_num=db.Column(db.Integer,db.ForeignKey('flight.num'),nullable=True) 
+    return_flight_num=db.Column(db.Integer,db.ForeignKey('flight.num'),nullable=False) # nullable false because it has to be 0 (no return) or a flight id
 
     # store booking preferences
     meal=db.Column('meal',db.String(10),nullable=False)
@@ -87,9 +87,6 @@ class Admin(db.Model,UserMixin):
     username = db.Column('username',db.String(10),nullable=False,unique=True)
     # bcrypt character is 60 characters
     hash=db.Column('hash',db.String(60),nullable=False)
-
-with app.app_context():
-    db.create_all()
 
 @app.route("/",methods=['GET','POST'])
 def index():
@@ -240,7 +237,7 @@ def payment():
 
         # if return date was kept empty, return flight number will be 0
         if session['returnDate'] =="":
-            return_flight_num=None
+            return_flight_num=0
         else:
             # if return date wasn't empty, customer will have already selected and saved a return flight number into session, we simply access and store it into a variable
             return_flight_num=session['return_num']
@@ -534,4 +531,6 @@ def logout():
     return redirect(url_for('login'))
     
 if __name__== "__main__":
-    app.run(host='0.0.0.0',port=8000)
+    with app.app_context():
+        db.create_all()
+    app.run(host='0.0.0.0')
