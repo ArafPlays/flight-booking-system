@@ -240,7 +240,7 @@ def payment():
 
         # if return date was kept empty, return flight number will be 0
         if session['returnDate'] =="":
-            return_flight_num=0
+            return_flight_num=None
         else:
             # if return date wasn't empty, customer will have already selected and saved a return flight number into session, we simply access and store it into a variable
             return_flight_num=session['return_num']
@@ -534,4 +534,4 @@ def logout():
     return redirect(url_for('login'))
     
 if __name__== "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',port=8000)
