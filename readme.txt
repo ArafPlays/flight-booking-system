@@ -6,7 +6,7 @@ Passenger(s) and booking details are stored on database.
 
 Users are able to manage their booking. (They need booking id and ref to manage)
 
-LOCAL SET UP
+LOCAL SET UP INSTRUCTIONS:
 
 1. Download/clone the repo
 
@@ -15,8 +15,8 @@ LOCAL SET UP
    python -m venv venv # Windows
 
 3. Activate it:
-   source venv/bin/activate  # macOS/Linux
-   venv\Scripts\activate     # Windows
+   source venv/bin/activate # macOS/Linux
+   venv\Scripts\activate # Windows
 
 4. Install dependencies:
    pip install -r requirements.txt
