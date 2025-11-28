@@ -21,5 +21,9 @@ LOCAL SET UP INSTRUCTIONS:
 4. Install dependencies:
    pip install -r requirements.txt
 
-5. Run the app:
+5. Create database
+   python3 create_db.py # macOS/Linux
+   python create_db.py # windows
+
+6. Run the app:
    flask run
